@@ -54,8 +54,11 @@ else()
 endif()
 
 # ---- ninja capture : capture/verify UART output on the ST-Link VCP ----------
+if(NOT DEFINED BOARD_ROOT)
+  set(BOARD_ROOT "${CMAKE_SOURCE_DIR}")
+endif()
 if(NOT DEFINED CAPTURE_SCRIPT)
-  set(CAPTURE_SCRIPT "${CMAKE_SOURCE_DIR}/capture.ps1")
+  set(CAPTURE_SCRIPT "${BOARD_ROOT}/capture.ps1")
 endif()
 find_program(CMAKE_POWERSHELL_EXECUTABLE NAMES powershell powershell.exe)
 if(NOT CMAKE_POWERSHELL_EXECUTABLE)

@@ -1,0 +1,60 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "debug_GCC_NUCLEO-C542RC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "${presetName}",
+                "TOOLCHAIN_FILE": "GCC.14.3.1.cmake",
+                "BUILD_TYPE": "debug",
+                "COMPILER_ID": "GCC"
+            },
+            "inherits": "default"
+        },
+        {
+            "name": "release_GCC_NUCLEO-C542RC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "${presetName}",
+                "TOOLCHAIN_FILE": "GCC.14.3.1.cmake",
+                "BUILD_TYPE": "release",
+                "COMPILER_ID": "GCC"
+            },
+            "inherits": "default"
+        },
+        {
+            "name": "release_ARMCLANG_NUCLEO-C542RC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "${presetName}",
+                "TOOLCHAIN_FILE": "STLLVM.cmake",
+                "BUILD_TYPE": "release",
+                "COMPILER_ID": "ARMCLANG"
+            },
+            "inherits": "default"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "configurePreset": "default"
+        },
+        {
+            "name": "debug_GCC_NUCLEO-C542RC",
+            "configurePreset": "debug_GCC_NUCLEO-C542RC"
+        },
+        {
+            "name": "release_GCC_NUCLEO-C542RC",
+            "configurePreset": "release_GCC_NUCLEO-C542RC"
+        },
+        {
+            "name": "release_ARMCLANG_NUCLEO-C542RC",
+            "configurePreset": "release_ARMCLANG_NUCLEO-C542RC"
+        }
+    ]
+}

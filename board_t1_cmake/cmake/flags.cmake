@@ -5,16 +5,23 @@
 
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES SUFFIX ".elf")
 
+# Location of the shared board support (CMSIS, DFP, HAL, generated code).
+# Defaults to the board root; benchmark sub-projects override this to point
+# at the parent directory that holds that support.
+if(NOT DEFINED BOARD_ROOT)
+  set(BOARD_ROOT "${CMAKE_SOURCE_DIR}")
+endif()
+
 # ---------- Include directories (shared across compilers) -----------------
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
-  .
-  arch/cmsis/CMSIS/Core/Include
-  generated/hal
-  stm32c5xx_dfp/Include
-  stm32c5xx_drivers/hal
-  stm32c5xx_drivers/ll
-  stm32c5xx_drivers/timebases
-  user_modifiable/_${BUILD_DIR_NAME}
+  ${BOARD_ROOT}
+  ${BOARD_ROOT}/arch/cmsis/CMSIS/Core/Include
+  ${BOARD_ROOT}/generated/hal
+  ${BOARD_ROOT}/stm32c5xx_dfp/Include
+  ${BOARD_ROOT}/stm32c5xx_drivers/hal
+  ${BOARD_ROOT}/stm32c5xx_drivers/ll
+  ${BOARD_ROOT}/stm32c5xx_drivers/timebases
+  ${BOARD_ROOT}/user_modifiable/_${BUILD_DIR_NAME}
 )
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC STM32C542xx _RTE_)
