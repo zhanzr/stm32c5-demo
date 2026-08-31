@@ -73,7 +73,10 @@ set(CMSIS_COMPONENTS_LIST ) # Start with empty component list. To be populated b
     list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:syscalls#Cvariant:Standalone syscalls#Cversion:1.0.0")
     list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:sysmem#Cvariant:Standalone sysmem#Cversion:1.0.0")
   endif()
-  set(CMSIS_RTE_FOLDER "${BOARD_ROOT}/user_modifiable")
+  # Each project owns its device files (system/startup/linker script) in its own
+  # `user_modifiable/` so it can tune STACK_SIZE, HEAP_SIZE and the memory layout
+  # (e.g. place code in RAM) independently of the board baseline project.
+  set(CMSIS_RTE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable")
 add_subdirectory(${BOARD_ROOT}/arch/cmsis ${CMAKE_CURRENT_BINARY_DIR}/arch/cmsis)
 add_subdirectory(${BOARD_ROOT}/stm32c5xx_dfp ${CMAKE_CURRENT_BINARY_DIR}/stm32c5xx_dfp)
 add_subdirectory(${BOARD_ROOT}/stm32c5xx_drivers ${CMAKE_CURRENT_BINARY_DIR}/stm32c5xx_drivers)

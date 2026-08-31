@@ -17,8 +17,8 @@ Bare-metal firmware for the **ST NUCLEO-C542RC** (STM32C542RCT6).
 
 ## Projects
 
-All projects build with CMake + Ninja and support the same three presets:
-`debug_GCC`, `release_GCC` (Arm GCC) and `release_ARMCLANG` (ST LLVM `starm-clang`).
+All projects build with CMake + Ninja and support the same two presets:
+`release_GCC` (Arm GCC) and `release_ARMCLANG` (ST LLVM `starm-clang`).
 
 | Project | Purpose | Result @ 144 MHz |
 |---------|---------|------------------|
@@ -41,7 +41,7 @@ Each project pins its tool paths via `bootstrap.ps1`:
 
 ```bat
 powershell -NoProfile -ExecutionPolicy Bypass -File bootstrap.ps1   :: once, from the project folder
-cmake --preset release_GCC_NUCLEO-C542RC                            :: or debug_GCC_... / release_ARMCLANG_...
+cmake --preset release_GCC_NUCLEO-C542RC                            :: or release_ARMCLANG_...
 cd build\release_GCC_NUCLEO-C542RC
 ninja                  :: build the ELF
 ninja hex              :: Intel HEX
@@ -50,8 +50,7 @@ ninja capture          :: live-capture the UART output from the ST-Link VCP (COM
 ```
 
 Each preset uses a separate build directory, so they can coexist:
-`build\debug_GCC_NUCLEO-C542RC`, `build\release_GCC_NUCLEO-C542RC`,
-`build\release_ARMCLANG_NUCLEO-C542RC`.
+`build\release_GCC_NUCLEO-C542RC`, `build\release_ARMCLANG_NUCLEO-C542RC`.
 
 > Use CMake >= 3.21 (e.g. the STM32CubeIDE-bundled CMake); the system `cmake` 3.20.5
 > cannot read `CMakePresets.json` v3.

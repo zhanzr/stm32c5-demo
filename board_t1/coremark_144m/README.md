@@ -5,21 +5,9 @@ EEMBC **CoreMark 1.0** benchmark for the **STM32C542RCT6** (NUCLEO-C542RC) @ **1
 This is an independent project that reuses the generated/peripheral infrastructure of the
 sibling `board_t1/board_t1_cmake/` baseline via a relative path
 (`BOARD_ROOT = ../board_t1_cmake`) — the CMSIS packs, STM32C5 DFP, HAL/LL drivers and
-board init are **not** copied here.
-
-## Source layout
-
-```
-coremark_144m/
-├── CMakeLists.txt         # board_t1_cmake via ../board_t1_cmake; + aggressive flags
-├── CMakePresets.json      # debug_GCC / release_GCC / release_ARMCLANG (Ninja)
-├── coremark_1_0_1/        # upstream EEMBC CoreMark 1.0 sources
-└── src/
-    ├── main.c             # entry: init, run coremark_main in a loop, print results
-    ├── core_portme.c      # port: ticks via HAL_GetTick(), malloc, portable_*()
-    ├── core_portme.h      # CoreMark port config/types, ee_printf -> printf
-    └── crt0_clang.c       # CLANG-only: _mainCRTStartup/_start (.data copy) + _sbrk
-```
+board init are **not** copied here. Its own `user_modifiable/Device/STM32C542RCT6/` holds
+this project's linker script, startup and system files, so its stack/heap layout can be
+tuned independently of the board baseline.
 
 ## Build
 
@@ -27,7 +15,7 @@ From `coremark_144m/`:
 
 ```bat
 powershell -NoProfile -ExecutionPolicy Bypass -File ..\board_t1_cmake\bootstrap.ps1
-cmake --preset release_GCC_NUCLEO-C542RC        :: or debug_GCC_... / release_ARMCLANG_...
+cmake --preset release_GCC_NUCLEO-C542RC        :: or release_ARMCLANG_...
 cd build\release_GCC_NUCLEO-C542RC
 ninja            :: coremark_144m.elf
 ninja flash      :: program the MCU

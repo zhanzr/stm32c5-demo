@@ -51,22 +51,20 @@ target_include_directories(coremark_144m PRIVATE
   ${CORE}
 )
 
-# --- Aggressive optimization flags for benchmarking (release only) ---
+# --- Aggressive optimization flags for benchmarking ---
 # GCC 15.3.1 + nano.specs + nosys fails to link when -flto is enabled
 # (the linker plugin drops the syscall stubs _fstat/_isatty and hits
 # unsupported-relocation during LTO recompile), so LTO is omitted here in
 # favour of reliable aggressive flags.
-if(NOT BUILD_TYPE STREQUAL "debug")
-  if(COMPILER_FAMILY STREQUAL "GCC")
-    target_compile_options(coremark_144m PRIVATE
-      SHELL:-Ofast -ffast-math -funroll-loops
-    )
-    # newlib-nano printf does not support %f by default; pull in the float
-    # printf variant so the CoreMark scores print (Dhrystone needs this too).
-    target_link_options(coremark_144m PRIVATE -Wl,-u,_printf_float)
-  elseif(COMPILER_FAMILY STREQUAL "CLANG")
-    target_compile_options(coremark_144m PRIVATE
-      SHELL:-O3 -ffast-math -funroll-loops
-    )
-  endif()
+if(COMPILER_FAMILY STREQUAL "GCC")
+  target_compile_options(coremark_144m PRIVATE
+    SHELL:-Ofast -ffast-math -funroll-loops
+  )
+  # newlib-nano printf does not support %f by default; pull in the float
+  # printf variant so the CoreMark scores print (Dhrystone needs this too).
+  target_link_options(coremark_144m PRIVATE -Wl,-u,_printf_float)
+elseif(COMPILER_FAMILY STREQUAL "CLANG")
+  target_compile_options(coremark_144m PRIVATE
+    SHELL:-O3 -ffast-math -funroll-loops
+  )
 endif()

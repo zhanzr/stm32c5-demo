@@ -157,6 +157,6 @@ if ($dirs.Count -gt 0) {
 }
 
 Write-Host "`nEnvironment ready. Example (from ${root}):"
-Write-Host "  cmake --preset debug_GCC_NUCLEO-C542RC"
-Write-Host "  cd build\debug_GCC_NUCLEO-C542RC; ninja hex; ninja flash"
+Write-Host "  cmake --preset release_GCC_NUCLEO-C542RC"
+Write-Host "  cd build\release_GCC_NUCLEO-C542RC; ninja hex; ninja flash"
 Write-Host "  # ARMCLANG (ST LLVM): cmake --preset release_ARMCLANG_NUCLEO-C542RC"

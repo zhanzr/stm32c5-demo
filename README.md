@@ -1,4 +1,4 @@
-# nucleo-c542
+# ST / NUCLEO Cortex-M Firmware
 
 Repository of bare-metal **Cortex-M** firmware projects for the ST/NUCLEO boards used in
 this environment. Each board lives in its own top-level folder and contains one or more

@@ -8,19 +8,10 @@ Bare-metal **Cortex-M** firmware for ST/NUCLEO boards, built with **CMake + Ninj
 (CMSIS-Toolbox / STM32CubeMX2 generated layout). The repo is multi-board: every board
 lives in its own top-level folder and contains one or more independent projects.
 
-```
-nucleo-c542/
-├── AGENTS.md                 # this file (repo-wide guidance)
-├── README.md                 # overall content + board index
-├── .gitignore
-└── board_t1/                 # one folder per board
-    ├── board_t1.ioc2         # hardware config source of truth
-    ├── board_images/         # board photos (embedded in board_t1/README.md)
-    ├── README.md             # board-relevant README
-    ├── board_t1_cmake/       # BASELINE project: generated/peripheral infra
-    ├── coremark_144m/        # independent project (reuses baseline via relative path)
-    └── dhry_144m/            # independent project (ditto)
-```
+A board folder (e.g. `board_t1/`) holds the board's source-of-truth `.ioc2`, its photos
+in `board_images/`, a board-level `README.md`, one **baseline** project (`*_cmake/`) that
+owns the generated/peripheral infrastructure, and any number of independent projects that
+reuse that baseline via relative paths.
 
 For each board, the **baseline** `*_cmake/` project is the source of the generated /
 peripheral infrastructure (CMSIS packs, DFP, HAL/LL drivers, board init, `generated/`,
@@ -35,7 +26,7 @@ reuses the board's `bootstrap.ps1`):
 
 ```bat
 powershell -NoProfile -ExecutionPolicy Bypass -File bootstrap.ps1    :: once (pins tools on PATH)
-cmake --preset release_GCC_NUCLEO-C542RC                              :: or debug_GCC_... / release_ARMCLANG_...
+cmake --preset release_GCC_NUCLEO-C542RC                              :: or release_ARMCLANG_...
 ```
 
 Then, from `build\<config>`:
@@ -47,8 +38,8 @@ ninja flash        :: program MCU via STM32CubeProgrammer (SWD, under reset)
 ninja capture      :: capture UART output from the ST-Link VCP (COM auto-detected)
 ```
 
-Each preset uses its own build dir: `build\debug_GCC_NUCLEO-C542RC`,
-`build\release_GCC_NUCLEO-C542RC`, `build\release_ARMCLANG_NUCLEO-C542RC`.
+Each preset uses its own build dir: `build\release_GCC_NUCLEO-C542RC`,
+`build\release_ARMCLANG_NUCLEO-C542RC`.
 
 Use CMake >= 3.21 (STM32CubeIDE-bundled); the system `cmake` 3.20.5 cannot read
 `CMakePresets.json` v3.
@@ -73,7 +64,7 @@ Use CMake >= 3.21 (STM32CubeIDE-bundled); the system `cmake` 3.20.5 cannot read
   functions in headers.
 - Prefer compiler-agnostic `addr2line`/`nm`/CMake files that work for both GCC and
   ST LLVM; the two toolchains differ (see the ST LLVM notes below).
-- The three build configs are compiler-selected via preset `COMPILER_ID` and must keep
+- The two build configs are compiler-selected via preset `COMPILER_ID` and must keep
   using separate build dirs so they never overwrite each other.
 
 ### ST LLVM / ARMCLANG (critical)

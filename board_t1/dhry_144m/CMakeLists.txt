@@ -45,18 +45,16 @@ target_include_directories(dhry_144m PRIVATE
   src
 )
 
-# --- Aggressive optimization flags: Dhrystone must NOT use LTO (release only) ---
-if(NOT BUILD_TYPE STREQUAL "debug")
-  if(COMPILER_FAMILY STREQUAL "GCC")
-    target_compile_options(dhry_144m PRIVATE
-      SHELL:-Ofast -ffast-math -funroll-loops
-    )
-    # newlib-nano printf does not support %f by default; pull in the float
-    # printf variant so the Dhrystone results print (Microseconds, DMIPS/MHz).
-    target_link_options(dhry_144m PRIVATE -Wl,-u,_printf_float)
-  elseif(COMPILER_FAMILY STREQUAL "CLANG")
-    target_compile_options(dhry_144m PRIVATE
-      SHELL:-O3 -ffast-math -funroll-loops
-    )
-  endif()
+# --- Aggressive optimization flags: Dhrystone must NOT use LTO ---
+if(COMPILER_FAMILY STREQUAL "GCC")
+  target_compile_options(dhry_144m PRIVATE
+    SHELL:-Ofast -ffast-math -funroll-loops
+  )
+  # newlib-nano printf does not support %f by default; pull in the float
+  # printf variant so the Dhrystone results print (Microseconds, DMIPS/MHz).
+  target_link_options(dhry_144m PRIVATE -Wl,-u,_printf_float)
+elseif(COMPILER_FAMILY STREQUAL "CLANG")
+  target_compile_options(dhry_144m PRIVATE
+    SHELL:-O3 -ffast-math -funroll-loops
+  )
 endif()
