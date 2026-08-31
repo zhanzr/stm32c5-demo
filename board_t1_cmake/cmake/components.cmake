@@ -1,6 +1,5 @@
 # file-format: 1.0.0
 set(CMSIS_COMPONENTS_LIST ) # Start with empty component list. To be populated below by each config.
-if(${CMAKE_BUILD_TYPE} STREQUAL "debug_GCC_NUCLEO-C542RC")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:CMSIS#Cgroup:CORE#Cversion:6.2.0")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Device#Cgroup:STM32 HAL#Csub:ADC#Cversion:2.0.1")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Device#Cgroup:STM32 HAL#Csub:AES#Cversion:2.0.1")
@@ -63,10 +62,15 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "debug_GCC_NUCLEO-C542RC")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Device#Cgroup:STM32CubeMX2 Config#Csub:UART#Cversion:2.1.0#generated:true")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Device#Cgroup:Startup#Cversion:2.1.0")
   list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:STM32CubeMX2 Config#Csub:syscalls#Cversion:1.0.0#generated:true")
-  list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:syscalls#Cvariant:Standalone syscalls#Cversion:1.0.0")
-  list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:sysmem#Cvariant:Standalone sysmem#Cversion:1.0.0")
+  # The DFP "Standalone syscalls/sysmem" stubs are newlib syscall/sbrk
+  # implementations.  The ARMCLANG (ST LLVM) config links the bundled newlib
+  # libnosys + crt0 instead, so those DFP sources are excluded for that family
+  # (the syscalls package target is still created, just without those sources).
+  if(NOT COMPILER_FAMILY STREQUAL "CLANG")
+    list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:syscalls#Cvariant:Standalone syscalls#Cversion:1.0.0")
+    list(APPEND CMSIS_COMPONENTS_LIST "Cvendor:STMicroelectronics#Cclass:Utility#Cgroup:sysmem#Cvariant:Standalone sysmem#Cversion:1.0.0")
+  endif()
   set(CMSIS_RTE_FOLDER "${CMAKE_SOURCE_DIR}/user_modifiable")
-endif()
 add_subdirectory(arch/cmsis)
 add_subdirectory(stm32c5xx_dfp)
 add_subdirectory(stm32c5xx_drivers)

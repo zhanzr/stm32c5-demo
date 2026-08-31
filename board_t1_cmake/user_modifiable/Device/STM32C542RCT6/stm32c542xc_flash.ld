@@ -169,6 +169,7 @@ SECTIONS
     __StackTop = .;
     _estack = .;
     __stack = .;
+    __stack_limit = __StackLimit;
   } > RAM
 
   /DISCARD/ :

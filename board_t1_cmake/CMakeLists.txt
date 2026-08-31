@@ -5,14 +5,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_C_COMPILER_FORCED TRUE)
 set(CMAKE_CXX_COMPILER_FORCED TRUE)
 
+# Order matters:
+#  1. target.cmake   -> device/target vars (CPU, FPU, DSP, ...) for the toolchain
+#  2. TOOLCHAIN_FILE -> compiler definition (selected via the preset)
+#  3. project()      -> defines CMAKE_PROJECT_NAME
+#  4. config.cmake   -> derived vars (BUILD_TYPE, COMPILER_ID, CMSIS_Tcompiler, paths)
+#  5. files/flags/components/tools
 include(cmake/target.cmake)
 include(cmake/${TOOLCHAIN_FILE})
 
 project(board_t1)
 add_executable(board_t1)
+
+include(cmake/config.cmake)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
+include(cmake/tools.cmake)
 
 # Stubs to be able to add compiler flag overrides, e.g. -Os
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE

@@ -1,4 +1,9 @@
 # file-format: 1.0.0
-if(CMAKE_BUILD_TYPE STREQUAL "debug_GCC_NUCLEO-C542RC")
-  target_sources(${CMAKE_PROJECT_NAME} PRIVATE main.c main.h)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE main.c main.h retarget.c)
+
+# The ARMCLANG (ST LLVM) config uses the bundled newlib runtime and needs a
+# few shims it does not ship (see armclang_runtime.c).  GCC provides these
+# through its own newlib/crt0, so this file is CLANG-family only.
+if(COMPILER_FAMILY STREQUAL "CLANG")
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE armclang_runtime.c)
 endif()

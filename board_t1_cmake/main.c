@@ -44,10 +44,22 @@ int main(void)
     /*
       * You can start your application code here
       */
+    uint32_t tick = 0;
     while (1) {
-    	printf("%u\n", SystemCoreClock);
-    	HAL_GPIO_TogglePin(LD1_PORT, LD1_PIN);
-    	HAL_Delay(1000);
+      HAL_Delay(100);
+      tick++;
+
+      /* Toggle LD1 (PA5, low-active) every 500 ms */
+      if ((tick % 5U) == 0U)
+      {
+        HAL_GPIO_TogglePin(LD1_PORT, LD1_PIN);
+      }
+
+      /* Print system clock every 5 seconds */
+      if ((tick % 50U) == 0U)
+      {
+        printf("SystemCoreClock = %u Hz\n", (unsigned int)SystemCoreClock);
+      }
     }
   }
 } /* end main */
