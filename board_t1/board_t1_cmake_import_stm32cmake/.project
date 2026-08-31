@@ -34,7 +34,7 @@
 		<link>
 			<name>board_t1_cmake</name>
 			<type>2</type>
-			<location>D:/c5_prj/nucleo-c542/board_t1_cmake</location>
+			<location>D:/c5_prj/nucleo-c542/board_t1/board_t1_cmake</location>
 		</link>
 	</linkedResources>
 </projectDescription>

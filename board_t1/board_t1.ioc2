@@ -675,6 +675,12 @@
         "toolchain": "GCC",
         "exportSource": "include-packs-from-local",
         "removeBoard": true
+      },
+      "Open-CMSIS": {
+        "outputPath": "board_t1_open-cmsis",
+        "toolchain": "GCC",
+        "exportSource": "include-packs-from-local",
+        "removeBoard": true
       }
     },
     "lastUsedFormat": "CMake"
@@ -3957,7 +3963,7 @@ solution:
                     "enable_exti": false,
                     "output_active_state": "SET",
                     "output_init_state": "RESET",
-                    "output_type": "OPENDRAIN",
+                    "output_type": "PUSHPULL",
                     "speed": "LOW"
                   },
                   "label_name": []

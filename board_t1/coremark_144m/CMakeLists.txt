@@ -4,8 +4,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_C_COMPILER_FORCED TRUE)
 set(CMAKE_CXX_COMPILER_FORCED TRUE)
 
-# Resolve shared infrastructure from board_t1_cmake one level up.
-set(BOARD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+# This project reuses the generated/peripheral infrastructure of the sibling
+# board_t1_cmake project (device tools, DFP, HAL/LL drivers, CMSIS, board HAL
+# init, retarget, capture script) via a relative path.
+set(BOARD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../board_t1_cmake")
 
 include(${BOARD_ROOT}/cmake/target.cmake)
 include(${BOARD_ROOT}/cmake/${TOOLCHAIN_FILE})
