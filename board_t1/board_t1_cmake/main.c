@@ -16,6 +16,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc_internal.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -45,6 +46,12 @@ int main(void)
       * You can start your application code here
       */
     uint32_t tick = 0;
+
+    if (adc_internal_init() != 0)
+    {
+      printf("ADC internal channels init failed\n");
+    }
+
     while (1) {
       HAL_Delay(100);
       tick++;
@@ -55,10 +62,24 @@ int main(void)
         HAL_GPIO_TogglePin(LD1_PORT, LD1_PIN);
       }
 
-      /* Print system clock every 5 seconds */
+      /* Print system clock and the ADC internal channels every 5 seconds */
       if ((tick % 50U) == 0U)
       {
+        adc_internal_sample_t adc_smpl;
+
         printf("SystemCoreClock = %u Hz\n", (unsigned int)SystemCoreClock);
+        if (adc_internal_sample(&adc_smpl) == 0)
+        {
+          printf("ADC internal: Vdda %d mV, VREFINT %d mV, die temp %d.%02d C\n",
+                 (int)adc_smpl.vref_mv,
+                 (int)adc_smpl.vrefint_mv,
+                 (int)(adc_smpl.temp_mdegc / 1000),
+                 (int)((adc_smpl.temp_mdegc % 1000) / 10));
+        }
+        else
+        {
+          printf("ADC internal sampling failed\n");
+        }
       }
     }
   }

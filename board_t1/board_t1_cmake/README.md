@@ -189,7 +189,9 @@ flashing path.
 
 Key files: `CMakeLists.txt` (entry), `CMakePresets.json` (release_GCC /
 release_ARMCLANG), `bootstrap.ps1` (tool-path setup), `main.c`/`main.h` (LED toggle +
-clock print), `retarget.c` (printf → USART2), `capture.ps1` (UART capture),
+clock print + internal ADC sampling), `adc_internal.c`/`adc_internal.h` (samples the
+ADC1 internal channels: die temperature in °C and VREFINT in mV), `retarget.c`
+(printf → USART2), `capture.ps1` (UART capture),
 `armclang_runtime.c` + `crt0_clang.c` (CLANG-only shims), `cmake/` (build modules),
 `generated/hal/`
 (HAL init/config), `stm32c5xx_dfp/`, `stm32c5xx_drivers/`, `user_modifiable/` (startup,

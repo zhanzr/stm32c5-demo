@@ -1,5 +1,5 @@
 # file-format: 1.0.0
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE main.c main.h retarget.c)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE main.c main.h retarget.c adc_internal.c adc_internal.h)
 
 # The ARMCLANG (ST LLVM) config uses the bundled newlib runtime and needs a
 # few shims it does not ship (see armclang_runtime.c).  GCC provides these
