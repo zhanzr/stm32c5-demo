@@ -158,7 +158,11 @@ toolchain file (`cmake/STLLVM.cmake`) selects the ST-bundled **newlib** runtime 
   as a C `const` variable instead puts a flash address into MSPLIM and crashes at reset.
 - `armclang_runtime.c` is a small CLANG-only shim that supplies `__aeabi_read_tp`
   (newlib's per-thread TLS base, needed if a newlib path uses thread-local errno).
-  It is only compiled for the CLANG family.
+- `crt0_clang.c` is a CLANG-only shim providing a strong `_start`/`_mainCRTStartup`
+  that copies `.data` and zeroes `.bss` (the ST newlib crt0 leaves its data-copy hook
+  NULL, so without this the board would not boot under ST LLVM) plus a `_sbrk` that
+  stops at `__HeapLimit` instead of growing the heap into the stack.
+  Both shims are only compiled for the CLANG family.
 - The DFP "Standalone syscalls/sysmem" sources are excluded for CLANG
   (`components.cmake`); the newlib `libnosys.a` supplies the syscall stubs instead.
 
@@ -186,7 +190,8 @@ flashing path.
 Key files: `CMakeLists.txt` (entry), `CMakePresets.json` (release_GCC /
 release_ARMCLANG), `bootstrap.ps1` (tool-path setup), `main.c`/`main.h` (LED toggle +
 clock print), `retarget.c` (printf → USART2), `capture.ps1` (UART capture),
-`armclang_runtime.c` (CLANG-only shim), `cmake/` (build modules), `generated/hal/`
+`armclang_runtime.c` + `crt0_clang.c` (CLANG-only shims), `cmake/` (build modules),
+`generated/hal/`
 (HAL init/config), `stm32c5xx_dfp/`, `stm32c5xx_drivers/`, `user_modifiable/` (startup,
 system, linker script), `utilities/syscalls/` (newlib stubs — GCC only), `arch/cmsis/`.
 
